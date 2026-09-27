@@ -194,12 +194,13 @@ def tick(body: TickRequest):
             if customer.get("state") in {"churned", "lapsed_hard"}:
                 continue
         composed = _compose(category, merchant, trigger, customer if is_customer else None)
+        message_body = re.sub(r"\bWant me\s*to\b", "Want me to", composed["body"], flags=re.IGNORECASE)
         conversation_id = f"conv_{merchant_id}_{trigger_id}"
         action = {"conversation_id": conversation_id, "merchant_id": merchant_id,
                   "customer_id": customer_id if is_customer else None,
                   "send_as": composed["send_as"], "trigger_id": trigger_id,
                   "template_name": "vera_customer_reminder_v1" if is_customer else "vera_context_update_v1",
-                  "template_params": [composed["body"]], **composed}
+                  "template_params": [message_body], **composed, "body": message_body}
         actions.append(action)
         conversations[conversation_id] = {"merchant_id": merchant_id, "customer_id": customer_id,
                                          "send_as": composed["send_as"], "trigger": trigger,
