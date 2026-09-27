@@ -4,6 +4,8 @@ env/
 ENV/
 
 __pycache__/
+.pytest_cache/
+pytest-cache-files-*/
 *.py[cod]
 
 .env
