@@ -146,6 +146,8 @@ def test_seed_research_action_is_grounded_and_has_one_canonical_body(client, see
     action = actions[0]
     assert "3-month fluoride varnish recall" in action["body"]
     assert "JIDA Oct 2026, p.14" in action["body"]
+    assert "Source: JIDA Oct 2026, p.14. Would a patient-friendly summary be useful?" in action["body"]
+    assert action["body"].count("p.14. Would") == 1
     assert action["body"] == action["template_params"][0]
     assert main.state.conversations[action["conversation_id"]]["sent_bodies"][0] == action["body"]
     assert "Want meto" not in action["body"]
